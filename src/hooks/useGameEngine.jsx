@@ -254,7 +254,6 @@ export const GameEngineProvider = ({ children }) => {
                         newTime = TIME_PHASE_CARDS;
                     }
                 } else {
-                    
                     setPlayerTurn(newPlayerTurn, true);
                     if (getCard() === "punch") {
                         setPhase("playerChoice", true);

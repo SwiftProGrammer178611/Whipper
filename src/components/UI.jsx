@@ -1,8 +1,7 @@
 import { NB_ROUNDS, useGameEngine } from "../hooks/useGameEngine";
 import { myPlayer, isHost } from "playroomkit";
+
 export const UI = () => {
-
-
     const  {
         phase,
         startGame,
@@ -13,7 +12,6 @@ export const UI = () => {
         getCard,
         actionSuccess,
     } = useGameEngine();
-
     const currentPlayer = players[playerTurn];
     const me = myPlayer();
     const currentCard = getCard();
@@ -21,7 +19,6 @@ export const UI = () => {
         phase === "playerAction" &&
         currentCard === "punch" &&
         players[currentPlayer.getState("playerTarget")];
-
     let label = "";
     switch(phase) {
         case "cards":
