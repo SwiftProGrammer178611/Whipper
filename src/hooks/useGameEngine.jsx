@@ -1,26 +1,27 @@
-import { 
-    getState, 
-    useMultiplayerState, 
-    usePlayersList, 
-    onPlayerJoin,
-    isHost 
-} from 'playroomkit';
+import { getState, useMultiplayerState, usePlayersList, onPlayerJoin, isHost } from 'playroomkit';
 import React, { useRef, useEffect } from 'react';
-import {randInt} from "three/src/math/MathUtils";
-import { useControls} from 'leva';
+import { randInt } from "three/src/math/MathUtils";
+import { useControls } from 'leva';
 
+/*
+Think of this file as the Engine of the car
+It's not the prettiest but necessary for the functionality and is core to the whole thing because it runs on it
+
+*/
 
 const GameEngineContext = React.createContext();
 
+// some constants for initiation of the game
 const TIME_PHASE_CARDS = 10;
 const TIME_PHASE_PLAYER_CHOICE = 10;
-const TIME_PHASE_PLAYER_ACTION = 3; 
+const TIME_PHASE_PLAYER_ACTION = 3;
 export const NB_ROUNDS = 3;
 const NB_GEMS = 3;
 const CARDS_PER_PLAYER = 4;
 
 
 export const GameEngineProvider = ({ children }) => {
+    // Similiar to useState in react, useMultiplayerState is playroom kit's version of it. and the value is synced across every client thats connected 
     const [timer, setTimer] = useMultiplayerState("timer", 0);
     const [round, setRound] = useMultiplayerState("round", 1);
     const [phase, setPhase] = useMultiplayerState("phase", "lobby");
@@ -33,8 +34,11 @@ export const GameEngineProvider = ({ children }) => {
         true
     );
 
+    // This usePlayersList gives an array of connected players. 
+    // It updates itself not only when a player joins/leaves but also 
+    // if anythign happens to that player like if it's state changes
     const players = usePlayersList(true);
-
+    //this sorting amkes sure teh players array from all clients is the same
     players.sort((a, b) => a.id.localeCompare(b.id));
 
     const gameState = {
@@ -48,7 +52,7 @@ export const GameEngineProvider = ({ children }) => {
         deck,
         actionSuccess,
     };
-
+    //dsitrbuting cards to players logic
     const distributeCards = (nbCards) => {
         const newDeck = [...getState("deck")];
         players.forEach((player) => {
@@ -64,6 +68,8 @@ export const GameEngineProvider = ({ children }) => {
         });
         setDeck(newDeck, true);
     };
+    // this is hte paused checkbox from leva that you see when you play the game
+    
     const { paused } = useControls({
         paused: false,
     });
@@ -83,11 +89,9 @@ export const GameEngineProvider = ({ children }) => {
             }
         }, 1000);
     };
-
     const clearTimer = () => {
         clearInterval(timerInterval.current);
     }
-
     useEffect(() => {
         runTimer();
         return clearTimer;
@@ -125,9 +129,10 @@ export const GameEngineProvider = ({ children }) => {
 
     useEffect(() => {
         startGame();
+        //quite literally what it says here is what it means
         onPlayerJoin(startGame);
     }, []);
-
+    // for defaut player action is shield unless player picks otherwise
     const performPlayerAction = () => {
         const player = players[getState("playerTurn")];
         console.log("Perform Player Action ", player.id);
@@ -149,26 +154,26 @@ export const GameEngineProvider = ({ children }) => {
                 }
 
                 console.log("Punch target", target.id);
-                if(target.getState("shield")) {
+                if (target.getState("shield")) {
                     console.log("Target is shelded");
                     success = false;
                     break;
                 }
-                if(target.getState("gems") >0) {
+                if (target.getState("gems") > 0) {
                     target.setState("gems", target.getState("gems") - 1, true);
                     setGems(getState("gems") + 1, true);
                     console.log("targ has gems")
                 }
                 break;
             case "grab":
-                if(getState("gems") > 0){
-                    player.setState("gems", player.getState("gems") +1, true);
-                    setGems(getState("gems") -1, true);
+                if (getState("gems") > 0) {
+                    player.setState("gems", player.getState("gems") + 1, true);
+                    setGems(getState("gems") - 1, true);
                     console.log("Grabbed Gem");
                 }
                 else {
                     console.log("no gems available");
-                    success=false;
+                    success = false;
                 }
                 break;
             case "shield":
@@ -177,11 +182,10 @@ export const GameEngineProvider = ({ children }) => {
                 break;
             default:
                 break;
-                
+
         }
         setActionSuccess(success, true);
     };
-
     const removePlayerCard = () => {
         const player = players[getState("playerTurn")];
         const cards = player.getState("cards");
@@ -203,7 +207,6 @@ export const GameEngineProvider = ({ children }) => {
         const selectedCard = player.getState("selectedCard");
         return cards[selectedCard];
     };
-
     const phaseEnd = () => {
         let newTime = 0;
         switch (getState("phase")) {
