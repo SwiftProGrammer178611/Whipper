@@ -69,7 +69,7 @@ export const MobileController = () => {
             <group scale={scalingRatio}>
                 <group position={3.5} position-x={-0.6}>
                     <PlayerName
-                        name={me.getProfile()?.name ?? "Player"}
+                        name={me.getProfile()?.name || "Player"}
                         position-y={0.8}
                         fontSize={0.1}
                     />
@@ -84,7 +84,7 @@ export const MobileController = () => {
                             src="/models/UI_Gem_Blue.gltf"
                             position-x={0.7 + index * 0.25}
                             position-y={0.25}
-                            scale={0.5}
+                            scale={0.3}
                         />
                     ))}
                 </group>
@@ -128,7 +128,7 @@ export const MobileController = () => {
                                             <meshStandardMaterial color="hotpink" />
                                         </mesh>
                                         <PlayerName
-                                            name={player.getProfile()?.name ?? "Player"}
+                                            name={player.getProfile()?.name || "Player"}
                                             fontSize={0.3}
                                             position-y={1.6} />
                                         <Character character={index} animation="Idle" />

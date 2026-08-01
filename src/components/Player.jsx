@@ -79,7 +79,7 @@ export const Player = ({ player, index }) => {
 
     return (
         <group ref={groupRef} position-x={baseX} position-z={baseZ}>
-            <PlayerName name={player.getProfile()?.name ?? "Player"} position-y={0.8} />
+            <PlayerName name={player.getProfile()?.name || "Player"} position-y={0.8} />
             <Character
                 scale={0.5}
                 character={index}
@@ -95,7 +95,7 @@ export const Player = ({ player, index }) => {
                         position-x={gemIndex * 0.5}
                         position-y={0.25}
                         position-z={0.5}
-                        scale={0.5}
+                        scale={0.3}
                     />
                 ))}
             </Center>

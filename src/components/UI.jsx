@@ -1,4 +1,3 @@
-
 import { NB_ROUNDS, useGameEngine } from "../hooks/useGameEngine";
 import { myPlayer, isHost, setDiscordServerData } from "playroomkit";
 import { ShortType } from "three";
@@ -31,18 +30,18 @@ export const UI = () => {
             label = "Select card U wanna play";
             break;
         case "playerChoice":
-            label = currentPlayer.id === me.id ? "Select Player U wanna punch" : `${currentPlayer?.state.profile?.name} is going to punch someone`;
+            label = currentPlayer.id === me.id ? "Select Player U wanna punch" : `${currentPlayer?.getProfile()?.name} is going to punch someone`;
             break;
         case "playerAction":
             switch (currentCard) {
                 case "punch":
-                    label = actionSuccess ? `${currentPlayer?.state.profile?.name} is punching ${target?.state.profile?.name}` : `${currentPlayer?.state.profile?.name} failed punching ${target?.state.profile.name}`;
+                    label = actionSuccess ? `${currentPlayer?.getProfile()?.name} is punching ${target?.getProfile()?.name}` : `${currentPlayer?.getProfile()?.name} failed punching ${target?.getProfile()?.name}`;
                     break;
                 case "grab":
-                    label = actionSuccess ? `${currentPlayer?.state.profile?.name} is grabbing a gem` : `no more gems for ${currentPlayer?.state.profile?.name}`;
+                    label = actionSuccess ? `${currentPlayer?.getProfile()?.name} is grabbing a gem` : `no more gems for ${currentPlayer?.getProfile()?.name}`;
                     break;
                 case "shield":
-                    label = `${currentPlayer?.state.profile?.name} cant be punched bc of the shield. WAIT till next turn`;
+                    label = `${currentPlayer?.getProfile()?.name} cant be punched bc of the shield. WAIT till next turn`;
                     break;
                 default:
                     break;
@@ -85,7 +84,7 @@ export const UI = () => {
                         Winner:{" "}
                         {players
                             .filter((player) => player.getState("winner"))
-                            .map((player) => player.getProfile()?.name??"Player")
+                            .map((player) => player.getProfile()?.name || "Player")
                             .join(", ")}
                         !
                     </p>
@@ -99,4 +98,3 @@ export const UI = () => {
         </div>
     );
 }
-

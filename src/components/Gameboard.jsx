@@ -54,8 +54,8 @@ export const Gameboard = () => {
             frames={35}
             alphaTest={0.75}
             scale={100}
-            position={[0, 0.01, 0]}
-            color="#EF8D4E"
+            position={[1, -6, 1]}
+            color="#3bbb52"
         >
             <RandomizedLight
                 amount={4}
@@ -79,9 +79,11 @@ export const Gameboard = () => {
         <Gltf
             castShadow
             src="/models/Gameboard.glb"
-            scale={0.8}
-            position-x={-1}
-            position-z={5}
+            scale={10}
+            position-x={2}
+            position-z={2}
+            position-y={0.3}
+            rotation-y={degToRad(180)}
         />
         {shadows}
         <group position-x={4} position-z={-2}>
@@ -104,7 +106,7 @@ export const Gameboard = () => {
                 src="/models/UI_Gem_Blue.gltf"
                 position-x={index * 0.5}
                 position-y={0.25}
-                scale={0.5}
+                scale={0.3}
             />
         ))}
         {players.map((player, index) => (
